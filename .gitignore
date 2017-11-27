@@ -1,3 +1,5 @@
 # Files and directories to ignore
 
 virt/
+tellMe.egg-info/
+__pycache__/
