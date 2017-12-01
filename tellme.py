@@ -5,11 +5,11 @@ from modules.xmas import days_till_xmas
 from modules.hnews import hacker_news
 
 def btc(args):
-    if not currency_check(args.fiat):
+    if not currency_check(args.fiat.upper()):
         print('\nInvalid currency.')
         return False
-    price = get_price(args.fiat)
-    print('\nBitcoin is currently worth ' + price + ' in ' + args.fiat)
+    price = get_price(args.fiat.upper())
+    print('\nBitcoin is currently worth ' + price[:-2] + ' in ' + args.fiat.upper())
 
 def wth(args):
     if args.place == 'gal':
