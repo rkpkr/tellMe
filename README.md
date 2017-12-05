@@ -11,7 +11,7 @@ In Windows, you could convert the script to an EXE using something like cx_Freez
 then place the EXE in your path, allowing you to call it without the .py extension.
 
 ## Usage
-The basic usage is simple: python tellme.py command arguments
+The basic usage is simple: `python tellme.py command arguments`.
 In Linux, you may need to explicitly use python3 instead of python to run the script.
 The commands are listed in the help, called by giving the -h or --help arguments when
 you run the script. 
@@ -37,9 +37,9 @@ xmas - Calculates the days left until Christmas.
 hnews - Grabs # of top headlines from Hacker News, where # is specified by you.
     `tellme.py hnews 10`
 
-timeleft - Calculates the amount of years and days you have left to live.
+timeleft - Calculates the amount of years and days you have left to live. Arguments are: gender, year of birth, month of birth, day of birth.
     `tellme.py timeleft M 1912 7 23`
-    Arguments are: gender, year of birth, month of birth, day of birth
+    
 
 ## Future Plans
 
