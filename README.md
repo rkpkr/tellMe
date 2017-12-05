@@ -43,10 +43,10 @@ timeleft - Calculates the amount of years and days you have left to live.
 
 ## Future Plans
 
-Fix the weather module.
-Add Reddit module.
-Expand cryptocurrency module.
-Add currency exchange rates module.
-Add ability to use a configuration file.
+* Fix the weather module.
+* Add Reddit module.
+* Expand cryptocurrency module.
+* Add currency exchange rates module.
+* Add ability to use a configuration file.
 
 
