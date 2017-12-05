@@ -17,7 +17,7 @@ The commands are listed in the help, called by giving the -h or --help arguments
 you run the script. 
 
 Here's a simple example of using it:
-python tellme.py btc GBP
+`python tellme.py btc GBP`
 
 That command will check the Bitcoin price in British Pounds and display it on screen.
 
@@ -25,21 +25,21 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
 btc - Checks the Bitcoin price in specified currency. Currency codes are three letters,
 e.g. JPY for Japanese yen or USD for U.S. Dollars
-    tellme.py btc currency
+    `tellme.py btc currency`
 
 wth - Checks the local weather. Currently only works for the two hard-coded examples I
 have - one for Caribou, ME, and one for Galveston, TX.
-    tellme.py wth gal
+    `tellme.py wth gal`
 
 xmas - Calculates the days left until Christmas.
-    tellme.py xmas
+    `tellme.py xmas`
 
 hnews - Grabs # of top headlines from Hacker News, where # is specified by you.
-    tellme.py hnews 10
+    `tellme.py hnews 10`
 
 timeleft - Calculates the amount of years and days you have left to live.
-    tellme.py timeleft M 1912 7 23
-    arguments are: gender, year of birth, month of birth, day of birth
+    `tellme.py timeleft M 1912 7 23`
+    Arguments are: gender, year of birth, month of birth, day of birth
 
 ## Future Plans
 
