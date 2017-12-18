@@ -1,13 +1,12 @@
 import argparse
 
 
-def btc(args):
-    from modules.crypto import get_price, currency_check 
+def coin(args):
+    from modules.crypto import currency_check, crypto_price 
     if not currency_check(args.fiat.upper()):
         print('\nInvalid currency.')
         return False
-    price = get_price(args.fiat.upper())
-    print('\nBitcoin is currently worth ' + price[:-2] + ' in ' + args.fiat.upper())
+    crypto_price(args.coin.upper(), args.fiat.upper())
 
 def wth(args):
     from modules.weather import galv_weather, caribou_weather
@@ -37,9 +36,10 @@ def timeleft(args):
 parser = argparse.ArgumentParser(prog='tellme',description='Retrieve information without leaving the command line.')
 subparsers = parser.add_subparsers()
 
-btc_parser = subparsers.add_parser('btc', help='Find the value of bitcoin in specified currency.')
-btc_parser.add_argument('fiat', nargs='?', default='USD', const='USD',help='desired currency to convert to (format: 3 character currency code, e.g. USD)')
-btc_parser.set_defaults(func=btc)
+coin_parser = subparsers.add_parser('coin', help='Find the value of a cryptocurrency in specified fiat currency.')
+coin_parser.add_argument('coin', nargs='?', default='BTC', const='BTC', help='cryptocurrency you want to see the value of, e.g. BTC for Bitcoin, ETH for Ethereum, etc.')
+coin_parser.add_argument('fiat', nargs='?', default='USD', const='USD',help='desired currency to convert to (format: 3 character currency code, e.g. USD)')
+coin_parser.set_defaults(func=coin)
 
 wth_parser = subparsers.add_parser('wth', help='Find the current weather for specified location.')
 wth_parser.add_argument('place', nargs='?', default='car', const='car',help='location to get weather for')
