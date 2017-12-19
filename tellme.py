@@ -2,7 +2,7 @@ import argparse
 
 
 def coin(args):
-    from modules.crypto import currency_check, crypto_price 
+    from modules.crypto import currency_check, format, crypto_price 
     if not currency_check(args.fiat.upper()):
         print('\nInvalid currency.')
         return False

@@ -14,14 +14,37 @@ def currency_check(currency):
     else:
         return False
 
+
+def format(number):
+    formatted = ''
+    count = 0
+    while count < len(number):
+        if number[count] == '.':
+            formatted = formatted + '.'
+            if (len(number) - count) > 2:
+                count = (len(number) - 2)
+            elif (count + 1) == (len(number) - 1):
+                formatted = formatted + number[count+1]
+                formatted = formatted + '0'
+                count += 2
+            else:
+                count += 1
+        else:
+            formatted = formatted + number[count]
+            count += 1
+    return formatted
+
+
 def crypto_price(coin, currency):
-    common = ['BTC', 'ETH', 'BCH', 'LTC', 'XRP', 'DASH', 'XMR']
+    common = ['BTC', 'ETH', 'BCH', 'LTC']
     if coin in common and currency == 'USD':
         r = requests.get('https://api.coinmarketcap.com/v1/ticker/?limit=10')
         j = r.json()
         for item in j:
             if item['symbol'] == coin:
-                print('\n' + coin + ' is currently worth ' + str(item['price_usd']) +
+                price = str(item['price_usd'])
+                fixed_price = format(price)
+                print('\n' + coin + ' is currently worth ' + fixed_price +
                         ' in USD, with a change of ' + str(item['percent_change_24h']) +
                         '% in the past 24 hours.')
                 return True
@@ -32,7 +55,9 @@ def crypto_price(coin, currency):
         for item in j:
             if item['symbol'] == coin:
                 cur = 'price_' + currency.lower()
-                print('\n' + coin + ' is currently worth ' + str(item[cur]) +
+                price = str(item[cur])
+                fixed_price  = format(price)
+                print('\n' + coin + ' is currently worth ' + fixed_price +
                         ' in ' + currency + ', with a change of ' +
                         str(item['percent_change_24h']) +
                         '% in the past 24 hours.')
@@ -44,7 +69,9 @@ def crypto_price(coin, currency):
         for item in j:
             if item['symbol'] == coin:
                 cur = 'price_' + currency.lower()
-                print('\n' + coin + ' is currently worth ' + str(item[cur]) +
+                price = str(item[cur])
+                fixed_price = format(price)
+                print('\n' + coin + ' is currently worth ' + fixed_price +
                         ' in ' + currency + ', with a change of ' +
                         str(item['percent_change_24h']) +
                         '% in the past 24 hours.')
@@ -58,7 +85,7 @@ if __name__ == '__main__':
     currency_check('NZD')
     currency_check('ZZZ')
     currency_check('asdfsdkf')
-#    crypto_price('BTC', 'USD')
-#    crypto_price('ETH', 'NZD')
-    crypto_price('BAY', 'USD')
-    crypto_price('ZZZ', 'JPY')
+    crypto_price('BTC', 'USD')
+    crypto_price('ETH', 'NZD')
+#    crypto_price('BAY', 'USD')
+#    crypto_price('ZZZ', 'JPY')
