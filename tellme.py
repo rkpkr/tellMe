@@ -22,6 +22,11 @@ def hnews(args):
     print('\n', end='')
     hacker_news(int(args.stories))
 
+def zones(args):
+    from modules.timezones import time_zones
+    print('\n', end='')
+    time_zones()
+
 def timeleft(args):
     from modules.timeleft import time_left
     print('\n', end='')
@@ -46,6 +51,9 @@ xmas_parser.set_defaults(func=xmas)
 hnews_parser = subparsers.add_parser('hnews', help='Retrieve a number of top headlines from Hacker News.')
 hnews_parser.add_argument('stories', nargs='?', default=5, const=5, help='how many headlines you want to see')
 hnews_parser.set_defaults(func=hnews)
+
+zones_parser = subparsers.add_parser('zones', help='Display time in various time zones')
+zones_parser.set_defaults(func=zones)
 
 timeleft_parser = subparsers.add_parser('timeleft', help='Find how many years or days you have left to live.')
 timeleft_parser.add_argument('gender')
