@@ -9,15 +9,9 @@ def coin(args):
     crypto_price(args.coin.upper(), args.fiat.upper())
 
 def wth(args):
-    from modules.weather import galv_weather, caribou_weather
-    if args.place == 'gal':
-        weather = galv_weather()
-        print('\n' + weather['detailedForecast'])
-    elif args.place == 'car':
-        weather = caribou_weather()
-        print('\n' + weather['detailedForecast'])
-    else:
-        print('\nInvalid city.')
+    from modules.weather import get_weather
+    weather = get_weather(args.town, args.area)
+    print('\n' + weather['detailedForecast'])
 
 def xmas(args):
     from modules.xmas import days_till_xmas
@@ -38,11 +32,12 @@ subparsers = parser.add_subparsers()
 
 coin_parser = subparsers.add_parser('coin', help='Find the value of a cryptocurrency in specified fiat currency.')
 coin_parser.add_argument('coin', nargs='?', default='BTC', const='BTC', help='cryptocurrency you want to see the value of, e.g. BTC for Bitcoin, ETH for Ethereum, etc.')
-coin_parser.add_argument('fiat', nargs='?', default='USD', const='USD',help='desired currency to convert to (format: 3 character currency code, e.g. USD)')
+coin_parser.add_argument('fiat', nargs='?', default='USD', const='USD',help='desired currency to convert to, e.g. USD)')
 coin_parser.set_defaults(func=coin)
 
 wth_parser = subparsers.add_parser('wth', help='Find the current weather for specified location.')
-wth_parser.add_argument('place', nargs='?', default='car', const='car',help='location to get weather for')
+wth_parser.add_argument('town', nargs='?', default='Caribou', const='Caribou',help='town to get weather for')
+wth_parser.add_argument('area', nargs='?', default='ME', const='ME', help='state or country town is in')
 wth_parser.set_defaults(func=wth)
 
 xmas_parser = subparsers.add_parser('xmas', help='Find how many days until Christmas.')
