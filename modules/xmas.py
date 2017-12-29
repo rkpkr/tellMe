@@ -5,7 +5,7 @@ def days_till_xmas():
     month = datetime.date.today().month
     day = datetime.date.today().day
     if month == 12 and day == 25:
-        print('\nToday is Christmas!')
+        print('\nMerry Christmas!')
         return True
     elif month == 12 and day > 25:
         year += 1

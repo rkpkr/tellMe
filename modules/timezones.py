@@ -11,8 +11,8 @@ def time_zones():
     utc_hour = utc.hour
 
     zones = OrderedDict([('America (Alaska)', -9),
-                        ('America (Houston)', -6),
-                        ('America (New York)', -5),
+                        ('America (Texas)', -6),
+                        ('America (Maine)', -5),
                         ('United Kingdom (UTC)', 0),
                         ('France', 1),
                         ('Finland', 2),
