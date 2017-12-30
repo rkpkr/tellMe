@@ -9,9 +9,15 @@ def coin(args):
     crypto_price(args.coin.upper(), args.fiat.upper())
 
 def wth(args):
-    from modules.weather import get_weather
-    weather = get_weather(args.town, args.area)
-    print('\n' + weather['detailedForecast'])
+    from modules.weather import get_weather, get_coords
+    latlon = get_coords(args.town, args.area)
+    try:
+        weather = get_weather(latlon)
+        print('\n' + weather['detailedForecast'])
+    except KeyError:
+        from modules.weather import get_weather2
+        weather = get_weather2(latlon)
+        print('\n' + weather)
 
 def xmas(args):
     from modules.xmas import days_till_xmas
