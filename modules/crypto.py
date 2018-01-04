@@ -47,7 +47,7 @@ def crypto_price(coin, currency):
                 print('\n' + coin + ' is currently worth ' + fixed_price +
                         ' in USD, with a change of ' + str(item['percent_change_24h']) +
                         '% in the past 24 hours.')
-                return True
+                return fixed_price
     elif coin in common and currency != 'USD':
         u = 'https://api.coinmarketcap.com/v1/ticker/?convert=' + currency + '&limit=10' 
         r = requests.get(u)
@@ -61,7 +61,7 @@ def crypto_price(coin, currency):
                         ' in ' + currency + ', with a change of ' +
                         str(item['percent_change_24h']) +
                         '% in the past 24 hours.')
-                return True
+                return fixed_price
     elif coin not in common:
         u = 'https://api.coinmarketcap.com/v1/ticker/?convert=' + currency
         r = requests.get(u)
@@ -75,7 +75,7 @@ def crypto_price(coin, currency):
                         ' in ' + currency + ', with a change of ' +
                         str(item['percent_change_24h']) +
                         '% in the past 24 hours.')
-                return True
+                return fixed_price
         print('\nCryptocurrency not found.')
         return False
 

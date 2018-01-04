@@ -11,7 +11,11 @@ def coin(args):
     if not currency_check(args.fiat.upper()):
         print('\nInvalid currency.')
         return False
-    crypto_price(args.coin.upper(), args.fiat.upper())
+    cprice = crypto_price(args.coin.upper(), args.fiat.upper())
+    if args.coin in cfg_vals['Cryptocurrency']:
+        print('Your ' + args.coin.upper() + ' is currently worth ' + 
+            str(float(cfg_vals['Cryptocurrency'][args.coin]) * float(cprice)) +
+            ' ' + args.fiat.upper() + '.')
 
 def wth(args):
     from modules.weather import get_weather, get_coords
