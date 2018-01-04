@@ -1,5 +1,10 @@
 import argparse
 
+def config(args):
+    from modules.config import default_config
+    if args.create:
+        default_config()
+        print('\nNew configuration file created.')
 
 def coin(args):
     from modules.crypto import currency_check, format, crypto_price 
@@ -41,6 +46,11 @@ def timeleft(args):
 parser = argparse.ArgumentParser(prog='tellme',description='Retrieve information without leaving the command line.')
 subparsers = parser.add_subparsers()
 
+config_parser = subparsers.add_parser('config', help='Create a new config file or add/change config values.')
+config_parser.add_argument('create', nargs='?', default=True, const=True, help='creates new config file')
+config_parser.set_defaults(func=config)
+
+
 coin_parser = subparsers.add_parser('coin', help='Find the value of a cryptocurrency in specified fiat currency.')
 coin_parser.add_argument('coin', nargs='?', default='BTC', const='BTC', help='cryptocurrency you want to see the value of, e.g. BTC for Bitcoin, ETH for Ethereum, etc.')
 coin_parser.add_argument('fiat', nargs='?', default='USD', const='USD',help='desired currency to convert to, e.g. USD)')
@@ -70,5 +80,7 @@ timeleft_parser.set_defaults(func=timeleft)
 
 
 if __name__ == '__main__':
+    from modules.config import import_config
+    cfg_vals = import_config()
     args = parser.parse_args()
     args.func(args)

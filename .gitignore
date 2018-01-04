@@ -4,3 +4,4 @@ virt/
 tellMe.egg-info/
 __pycache__/
 *.log
+tmconfig.ini

@@ -1,4 +1,5 @@
 import configparser
+import os
 
 def default_config():
     config = configparser.ConfigParser()
@@ -10,8 +11,14 @@ def default_config():
         config.write(configfile)
 
 def import_config():
-   pass 
-
+    if os.path.isfile('tmconfig.ini'):
+        config = configparser.ConfigParser()
+        config.read('tmconfig.ini')
+        return config
+    else:
+        return False
 
 if __name__ == '__main__':
     default_config()
+    cf = import_config()
+    print(cf['Cryptocurrency']['BTC'])
