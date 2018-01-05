@@ -1,10 +1,13 @@
 import argparse
 
 def config(args):
-    from modules.config import default_config
-    if args.create:
+    from modules.config import default_config, add_config
+    if args.section.lower() == 'new':
         default_config()
         print('\nNew configuration file created.')
+    else:
+        add_config(args.section, args.name, args.value)
+        
 
 def coin(args):
     from modules.crypto import currency_check, format, crypto_price 
@@ -12,14 +15,20 @@ def coin(args):
         print('\nInvalid currency.')
         return False
     cprice = crypto_price(args.coin.upper(), args.fiat.upper())
-    if args.coin in cfg_vals['Cryptocurrency']:
+    if args.coin in cfg_vals['crypto']:
         print('Your ' + args.coin.upper() + ' is currently worth ' + 
-            str(float(cfg_vals['Cryptocurrency'][args.coin]) * float(cprice)) +
+            str(float(cfg_vals['crypto'][args.coin]) * float(cprice)) +
             ' ' + args.fiat.upper() + '.')
 
 def wth(args):
     from modules.weather import get_weather, get_coords
-    latlon = get_coords(args.town, args.area)
+    if 'town' in cfg_vals['weather'] and 'area' in cfg_vals['weather']:
+        t = cfg_vals['weather']['town']
+        a = cfg_vals['weather']['area']
+    else:
+        t = args.town
+        a = args.area
+    latlon = get_coords(t, a)
     try:
         weather = get_weather(latlon)
         print('\n' + weather['detailedForecast'])
@@ -34,8 +43,12 @@ def xmas(args):
 
 def hnews(args):
     from modules.hnews import hacker_news
+    if 'articles' in cfg_vals['hnews']:
+        ars = cfg_vals['hnews']['articles']
+    else:
+        ars = args.stories
     print('\n', end='')
-    hacker_news(int(args.stories))
+    hacker_news(int(ars))
 
 def zones(args):
     from modules.timezones import time_zones
@@ -51,9 +64,10 @@ parser = argparse.ArgumentParser(prog='tellme',description='Retrieve information
 subparsers = parser.add_subparsers()
 
 config_parser = subparsers.add_parser('config', help='Create a new config file or add/change config values.')
-config_parser.add_argument('create', nargs='?', default=True, const=True, help='creates new config file')
+config_parser.add_argument('section', nargs='?', default='new', const='new', help='section in config to add value to')
+config_parser.add_argument('name', nargs='?', help='item you want to add a value to in config')
+config_parser.add_argument('value', nargs='?', help='value you want to add to specified item') 
 config_parser.set_defaults(func=config)
-
 
 coin_parser = subparsers.add_parser('coin', help='Find the value of a cryptocurrency in specified fiat currency.')
 coin_parser.add_argument('coin', nargs='?', default='BTC', const='BTC', help='cryptocurrency you want to see the value of, e.g. BTC for Bitcoin, ETH for Ethereum, etc.')
@@ -72,7 +86,7 @@ hnews_parser = subparsers.add_parser('hnews', help='Retrieve a number of top hea
 hnews_parser.add_argument('stories', nargs='?', default=5, const=5, help='how many headlines you want to see')
 hnews_parser.set_defaults(func=hnews)
 
-zones_parser = subparsers.add_parser('zones', help='Display time in various time zones')
+zones_parser = subparsers.add_parser('zones', help='Display time in various time zones.')
 zones_parser.set_defaults(func=zones)
 
 timeleft_parser = subparsers.add_parser('timeleft', help='Find how many years or days you have left to live.')
