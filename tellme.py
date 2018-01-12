@@ -6,28 +6,44 @@ def config(args):
         default_config()
         print('\nNew configuration file created.')
     else:
-        add_config(args.section, args.name, args.value)
+        try:
+            add_config(args.section, args.name, args.value)
+        except:
+            print('\nInvalid parameters.')
         
 
 def coin(args):
     from modules.crypto import currency_check, format, crypto_price 
-    if not currency_check(args.fiat.upper()):
+    if args.coin is not None and args.fiat is not None:
+        cn = args.coin
+        ft = args.fiat
+    elif cfg_vals['crypto']['def_coin'] is not None and cfg_vals['crypto']['def_fiat'] is not None:
+        cn = cfg_vals['crypto']['def_coin']
+        ft = cfg_vals['crypto']['def_fiat']
+    else:
+        print('\nInvalid Parameters.')
+        return False
+    if not currency_check(ft.upper()):
         print('\nInvalid currency.')
         return False
-    cprice = crypto_price(args.coin.upper(), args.fiat.upper())
-    if args.coin in cfg_vals['crypto']:
-        print('Your ' + args.coin.upper() + ' is currently worth ' + 
-            str(float(cfg_vals['crypto'][args.coin]) * float(cprice)) +
-            ' ' + args.fiat.upper() + '.')
+    cprice = crypto_price(cn.upper(), ft.upper())
+    if cn in cfg_vals['crypto']:
+        print('Your ' + cn.upper() + ' is currently worth ' + 
+            str(float(cfg_vals['crypto'][cn]) * float(cprice)) +
+            ' ' + ft.upper() + '.')
 
 def wth(args):
     from modules.weather import get_weather, get_coords
-    if 'town' in cfg_vals['weather'] and 'area' in cfg_vals['weather']:
-        t = cfg_vals['weather']['town']
-        a = cfg_vals['weather']['area']
-    else:
+    if args.town is not None and args.area is not None:    
         t = args.town
         a = args.area
+    else:
+        try:
+            t = cfg_vals['weather']['town']
+            a = cfg_vals['weather']['area']
+        except:
+            print('\nNo town provided.')
+            return False
     latlon = get_coords(t, a)
     try:
         weather = get_weather(latlon)
@@ -50,6 +66,24 @@ def hnews(args):
     print('\n', end='')
     hacker_news(int(ars))
 
+def fx(args):
+    from modules.forex import frx
+    if args.base is not None and args.target is not None:
+        bs = args.base
+        tg = args.target
+    elif cfg_vals['forex']['base'] is not None and cfg_vals['forex']['target'] is not None:
+        bs = cfg_vals['forex']['base']
+        tg = cfg_vals['forex']['target']
+    else:
+        print('\nInvalid parameters.')
+        return False
+    try:
+        value = frx(bs.upper(), tg.upper())
+        print('\nOne ' + bs.upper() + ' is worth ' + str(value) + ' ' + tg.upper() + '.')
+    except:
+        print('\nInvalid parameters.')
+        return False
+
 def zones(args):
     from modules.timezones import time_zones
     print('\n', end='')
@@ -70,13 +104,13 @@ config_parser.add_argument('value', nargs='?', help='value you want to add to sp
 config_parser.set_defaults(func=config)
 
 coin_parser = subparsers.add_parser('coin', help='Find the value of a cryptocurrency in specified fiat currency.')
-coin_parser.add_argument('coin', nargs='?', default='BTC', const='BTC', help='cryptocurrency you want to see the value of, e.g. BTC for Bitcoin, ETH for Ethereum, etc.')
-coin_parser.add_argument('fiat', nargs='?', default='USD', const='USD',help='desired currency to convert to, e.g. USD)')
+coin_parser.add_argument('coin', nargs='?', help='cryptocurrency you want to see the value of, e.g. BTC for Bitcoin, ETH for Ethereum, etc.')
+coin_parser.add_argument('fiat', nargs='?', help='desired currency to convert to, e.g. USD)')
 coin_parser.set_defaults(func=coin)
 
 wth_parser = subparsers.add_parser('wth', help='Find the current weather for specified location.')
-wth_parser.add_argument('town', nargs='?', default='Caribou', const='Caribou',help='town to get weather for')
-wth_parser.add_argument('area', nargs='?', default='ME', const='ME', help='state or country town is in')
+wth_parser.add_argument('town', nargs='?', help='town to get weather for')
+wth_parser.add_argument('area', nargs='?', help='state or country town is in')
 wth_parser.set_defaults(func=wth)
 
 xmas_parser = subparsers.add_parser('xmas', help='Find how many days until Christmas.')
@@ -85,6 +119,11 @@ xmas_parser.set_defaults(func=xmas)
 hnews_parser = subparsers.add_parser('hnews', help='Retrieve a number of top headlines from Hacker News.')
 hnews_parser.add_argument('stories', nargs='?', default=5, const=5, help='how many headlines you want to see')
 hnews_parser.set_defaults(func=hnews)
+
+fx_parser = subparsers.add_parser('fx', help='Find the exchange rate of one currency into another.')
+fx_parser.add_argument('base', nargs='?', help='base currency to compare to target currency')
+fx_parser.add_argument('target', nargs='?', help='target currency to be compared to')
+fx_parser.set_defaults(func=fx)
 
 zones_parser = subparsers.add_parser('zones', help='Display time in various time zones.')
 zones_parser.set_defaults(func=zones)

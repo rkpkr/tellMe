@@ -4,6 +4,10 @@ A simple command line tool to quickly retrieve information without having to loa
 ## Setup
 You'll need Python 3 and all of the modules listed in requirements.txt.
 
+In order to use the weather module, you'll need to sign up for an API key at Mapquest and OpenWeatherMap, and then set those API keys as 'MQKey' (for Mapquest) and 'WTH' (for OpenWeatherMap) environment variables. You could also just declare them in the weather.py module if you don't want to use environment variables.
+
+If it's your first time using the program, you can run `tellme.py config` to generate a new configuration file, and then you can edit the values either through this program or by editing the 'tmconfig.ini' file.
+
 For easy use of this tool, place the script in your PATH, and you can call it anywhere.
 In Windows, you could convert the script to an EXE using something like cx_Freeze and
 then place the EXE in your path, allowing you to call it without the .py extension.
@@ -44,6 +48,10 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
     `tellme.py hnews 10`  # Retrieves the top 10 headlines from Hacker News
 
+**fx** - Finds the value of target currency in base currency you specify.
+
+    `tellme.py fx usd nzd'  # Shows the value of USD in NZD
+
 **zones** - Displays the time in various time zones. 
 
     `tellme.py zones`  # Shows time in a number of time zones
@@ -56,4 +64,3 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 ## Future Plans
 
 * Add Reddit module
-* Add currency exchange rates module

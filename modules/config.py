@@ -3,10 +3,14 @@ import os
 
 def default_config():
     config = configparser.ConfigParser()
-    config['crypto'] = {'BTC': .0025}
+    config['crypto'] = {'BTC': .0025,
+                        'def_coin': 'BTC',
+                        'def_fiat': 'USD'}
     config['weather'] = {'Town': 'Caribou',
                         'Area': 'Maine'}
     config['hnews'] = {'Articles': 10}
+    config['forex'] = {'Base': 'USD',
+                      'Target': 'JPY'}
     with open('tmconfig.ini', 'w') as configfile:
         config.write(configfile)
 

@@ -1,11 +1,14 @@
 import requests
 
 def hacker_news(desired_num):
-    r = requests.get('https://hacker-news.firebaseio.com/v0/topstories.json')
+    headers = {
+            'User-Agent': 'https://github.com/rkpkr/tellMe'
+    }
+    r = requests.get('https://hacker-news.firebaseio.com/v0/topstories.json', headers=headers)
     j = r.json()
     for x in range(desired_num):
         url = 'https://hacker-news.firebaseio.com/v0/item/' + str(j[x]) + '.json'
-        r2 = requests.get(url)
+        r2 = requests.get(url, headers=headers)
         j2 = r2.json()
         try:
             print(j2['title'])

@@ -37,8 +37,11 @@ def format(number):
 
 def crypto_price(coin, currency):
     common = ['BTC', 'ETH', 'BCH', 'LTC']
+    headers = {
+            'User-Agent': 'https://github.com/rkpkr/tellMe'
+    }
     if coin in common and currency == 'USD':
-        r = requests.get('https://api.coinmarketcap.com/v1/ticker/?limit=10')
+        r = requests.get('https://api.coinmarketcap.com/v1/ticker/?limit=10', headers=headers)
         j = r.json()
         for item in j:
             if item['symbol'] == coin:
@@ -50,7 +53,7 @@ def crypto_price(coin, currency):
                 return fixed_price
     elif coin in common and currency != 'USD':
         u = 'https://api.coinmarketcap.com/v1/ticker/?convert=' + currency + '&limit=10' 
-        r = requests.get(u)
+        r = requests.get(u, headers=headers)
         j = r.json()
         for item in j:
             if item['symbol'] == coin:
@@ -64,7 +67,7 @@ def crypto_price(coin, currency):
                 return fixed_price
     elif coin not in common:
         u = 'https://api.coinmarketcap.com/v1/ticker/?convert=' + currency
-        r = requests.get(u)
+        r = requests.get(u, headers=headers)
         j = r.json()
         for item in j:
             if item['symbol'] == coin:
