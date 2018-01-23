@@ -6,11 +6,9 @@ You'll need Python 3 and all of the modules listed in requirements.txt.
 
 In order to use the weather module, you'll need to sign up for an API key at Mapquest and OpenWeatherMap, and then set those API keys as 'MQKey' (for Mapquest) and 'WTH' (for OpenWeatherMap) environment variables. You could also just declare them in the weather.py module if you don't want to use environment variables.
 
-If it's your first time using the program, you can run `tellme.py config` to generate a new configuration file, and then you can edit the values either through this program or by editing the 'tmconfig.ini' file.
+Similarly, in order to use the reddit module, you'll need to set up an account and then claim an API key. The module uses 4 environment variables in order to access the API: 'RNAME' (reddit username), 'RPASS' (reddit password), 'RAPP' (the key associated with your app), and 'RSCRT' (the secret key reddit gives you for your app). 
 
-For easy use of this tool, place the script in your PATH, and you can call it anywhere.
-In Windows, you could convert the script to an EXE using something like cx_Freeze and
-then place the EXE in your path, allowing you to call it without the .py extension.
+If it's your first time using the program, you can run `tellme.py config new` to generate a new configuration file, and then you can edit the values either through this program or by editing the 'tmconfig.ini' file.
 
 ## Usage
 The basic usage is simple: `python tellme.py command arguments`.
@@ -50,7 +48,11 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
 **fx** - Finds the value of target currency in base currency you specify.
 
-    `tellme.py fx usd nzd'  # Shows the value of USD in NZD
+    `tellme.py fx usd nzd`  # Shows the value of USD in NZD
+
+**reddit** - Grabs the specified number of headlines from specified subreddit.
+
+    `tellme.py reddit python 10`  # Grabs 10 top headlines from the Python subreddit
 
 **zones** - Displays the time in various time zones. 
 
@@ -63,4 +65,6 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
 ## Future Plans
 
-* Add Reddit module
+* ASCII Art module
+* Some sort of pizza module?
+* Miscellaneous time-related modules
