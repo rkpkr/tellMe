@@ -23,7 +23,7 @@ def sub_headlines(subreddit, count):
     auth_token = type + ' ' + token
     headers = {'Authorization': auth_token,
             'User-Agent': 'tellMe (https://github.com/rkpkr/tellMe)'}
-    url = ('https://oauth.reddit.com/r/' + subreddit + '/top/?t=day&limit=' + str(count))
+    url = ('https://oauth.reddit.com/r/' + subreddit + '/top/?limit=' + str(count))
     response = requests.get(url, headers=headers)
     return response
 
@@ -33,6 +33,6 @@ if __name__ == '__main__':
     sub = input('Name a subreddit: ')
     r = sub_headlines(sub, 10)
     j = r.json()
-#    print(j['data']['children'][0]['data']['title'])
     for x in range(len(j['data']['children'])):
         print(j['data']['children'][x]['data']['title'])
+        print(j['data']['children'][x]['data']['permalink'])

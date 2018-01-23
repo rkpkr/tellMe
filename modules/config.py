@@ -11,6 +11,8 @@ def default_config():
     config['hnews'] = {'Articles': 10}
     config['forex'] = {'Base': 'USD',
                       'Target': 'JPY'}
+    config['reddit'] = {'Subreddit': 'python',
+                        'Headlines': 10}
     with open('tmconfig.ini', 'w') as configfile:
         config.write(configfile)
 

@@ -2,14 +2,20 @@ import argparse
 
 def config(args):
     from modules.config import default_config, add_config
-    if args.section.lower() == 'new':
+    if args.section is None:
+        print('\nInvalid parameters.')
+        return False
+    elif args.section.lower() == 'new':
         default_config()
         print('\nNew configuration file created.')
+        return True;
     else:
         try:
             add_config(args.section, args.name, args.value)
+            print('\n' + args.value + ' assigned to ' + args.name + ' in ' + args.section)
         except:
             print('\nInvalid parameters.')
+            return False
         
 
 def coin(args):
@@ -17,7 +23,7 @@ def coin(args):
     if args.coin is not None and args.fiat is not None:
         cn = args.coin
         ft = args.fiat
-    elif cfg_vals['crypto']['def_coin'] is not None and cfg_vals['crypto']['def_fiat'] is not None:
+    elif 'crypto' in cfg_vals:
         cn = cfg_vals['crypto']['def_coin']
         ft = cfg_vals['crypto']['def_fiat']
     else:
@@ -71,7 +77,7 @@ def fx(args):
     if args.base is not None and args.target is not None:
         bs = args.base
         tg = args.target
-    elif cfg_vals['forex']['base'] is not None and cfg_vals['forex']['target'] is not None:
+    elif 'forex' in cfg_vals: 
         bs = cfg_vals['forex']['base']
         tg = cfg_vals['forex']['target']
     else:
@@ -83,6 +89,29 @@ def fx(args):
     except:
         print('\nInvalid parameters.')
         return False
+
+def reddit(args):
+    from modules.reddit import sub_headlines
+    if args.sub is not None and args.titles is not None:
+        subred = args.sub
+        headlines = args.titles
+    elif 'reddit' in cfg_vals: 
+        subred = cfg_vals['reddit']['subreddit']
+        headlines = cfg_vals['reddit']['headlines']
+    else:
+        print('\nInvalid parameters.')
+        return False
+    try:
+        response = sub_headlines(subred, int(headlines))
+        j = response.json()
+        print('\n', end='')
+        for x in range(len(j['data']['children'])):
+            print(j['data']['children'][x]['data']['title'])
+            print('https://www.reddit.com' + j['data']['children'][x]['data']['permalink'] + '\n')
+    except:
+        print('\nInvalid parameters')
+        return False
+
 
 def zones(args):
     from modules.timezones import time_zones
@@ -98,7 +127,7 @@ parser = argparse.ArgumentParser(prog='tellme',description='Retrieve information
 subparsers = parser.add_subparsers()
 
 config_parser = subparsers.add_parser('config', help='Create a new config file or add/change config values.')
-config_parser.add_argument('section', nargs='?', default='new', const='new', help='section in config to add value to')
+config_parser.add_argument('section', nargs='?', help='section in config to add value to')
 config_parser.add_argument('name', nargs='?', help='item you want to add a value to in config')
 config_parser.add_argument('value', nargs='?', help='value you want to add to specified item') 
 config_parser.set_defaults(func=config)
@@ -124,6 +153,11 @@ fx_parser = subparsers.add_parser('fx', help='Find the exchange rate of one curr
 fx_parser.add_argument('base', nargs='?', help='base currency to compare to target currency')
 fx_parser.add_argument('target', nargs='?', help='target currency to be compared to')
 fx_parser.set_defaults(func=fx)
+
+reddit_parser = subparsers.add_parser('reddit', help='Grab a specified number of headlines from a particular subreddit.')
+reddit_parser.add_argument('sub', nargs='?', help='subreddit to grab headlines from')
+reddit_parser.add_argument('titles', nargs='?', help='number of headlines to grab')
+reddit_parser.set_defaults(func=reddit)
 
 zones_parser = subparsers.add_parser('zones', help='Display time in various time zones.')
 zones_parser.set_defaults(func=zones)
