@@ -8,11 +8,12 @@ def default_config():
                         'def_fiat': 'USD'}
     config['weather'] = {'Town': 'Caribou',
                         'Area': 'Maine'}
-    config['hnews'] = {'Articles': 10}
+    config['hnews'] = {'Stories': 10}
     config['forex'] = {'Base': 'USD',
                       'Target': 'JPY'}
     config['reddit'] = {'Subreddit': 'python',
                         'Headlines': 10}
+    config['stocks'] = {'Stock': 'AMD'}
     with open('tmconfig.ini', 'w') as configfile:
         config.write(configfile)
 

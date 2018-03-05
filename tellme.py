@@ -1,5 +1,6 @@
 import argparse
 
+
 def config(args):
     from modules.config import default_config, add_config
     if args.section is None:
@@ -66,7 +67,7 @@ def xmas(args):
 def hnews(args):
     from modules.hnews import hacker_news
     if 'articles' in cfg_vals['hnews']:
-        ars = cfg_vals['hnews']['articles']
+        ars = cfg_vals['hnews']['stories']
     else:
         ars = args.stories
     print('\n', end='')
@@ -111,6 +112,20 @@ def reddit(args):
     except:
         print('\nInvalid parameters')
         return False
+
+def stock(args):
+    from modules.stocks import get_stock
+    if args.stock is not None:
+        ticker = args.stock
+    elif 'stock' in cfg_vals['stocks']:
+        ticker = cfg_vals['stocks']['stock']
+    else:
+        print('\nInvalid parameters')
+        return False
+    data = get_stock(ticker)
+    print('\nLatest high: ' + str(data['data'][len(data['data']) - 1]['high']))
+    print('Latest low: ' + str(data['data'][len(data['data']) - 1]['low']))
+
 
 
 def zones(args):
@@ -158,6 +173,10 @@ reddit_parser = subparsers.add_parser('reddit', help='Grab a specified number of
 reddit_parser.add_argument('sub', nargs='?', help='subreddit to grab headlines from')
 reddit_parser.add_argument('titles', nargs='?', help='number of headlines to grab')
 reddit_parser.set_defaults(func=reddit)
+
+stock_parser = subparsers.add_parser('stock', help='Grab recent high/low for specified stock.')
+stock_parser.add_argument('stock', nargs='?', help='stock ticker to get information about')
+stock_parser.set_defaults(func=stock)
 
 zones_parser = subparsers.add_parser('zones', help='Display time in various time zones.')
 zones_parser.set_defaults(func=zones)
