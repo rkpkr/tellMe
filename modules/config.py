@@ -4,8 +4,8 @@ import os
 def default_config():
     config = configparser.ConfigParser()
     config['crypto'] = {'BTC': .0025,
-                        'def_coin': 'BTC',
-                        'def_fiat': 'USD'}
+                        'coin': 'BTC',
+                        'fiat': 'USD'}
     config['weather'] = {'Town': 'Caribou',
                         'Area': 'Maine'}
     config['hnews'] = {'Stories': 10}

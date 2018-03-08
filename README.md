@@ -54,6 +54,10 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
     `tellme.py reddit python 10`  # Grabs 10 top headlines from the Python subreddit
 
+**stock** - Finds the most recent high and low of a desired stock.
+
+    `tellme.py stock AMD` # Shows the most recent high and low value for AMD's stock
+
 **zones** - Displays the time in various time zones. 
 
     `tellme.py zones`  # Shows time in a number of time zones
@@ -65,6 +69,6 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
 ## Future Plans
 
+* Better error handling/logging
 * ASCII Art module
-* Some sort of pizza module?
 * Miscellaneous time-related modules

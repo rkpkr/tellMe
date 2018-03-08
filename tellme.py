@@ -1,5 +1,21 @@
 import argparse
 
+# This is a general purpose function to grab the parameters for the subparsers either
+# from the command line arguments, or, if no command line arguments are given, from
+# the config file. For usage, look further down in the code at one of the functions
+# that uses this.
+def get_params(cfg_sect, *params):
+    final_params = []
+    for p in params:
+        if cli_params[p] is not None:
+            final_params.append(cli_params[p])
+        elif p in cfg_vals[cfg_sect]:
+            final_params.append(cfg_vals[cfg_sect][p])
+    if len(final_params) < len(params):
+        print('\nInsufficient parameters.')
+        return False
+    else:
+        return final_params
 
 def config(args):
     from modules.config import default_config, add_config
@@ -21,37 +37,20 @@ def config(args):
 
 def coin(args):
     from modules.crypto import currency_check, format, crypto_price 
-    if args.coin is not None and args.fiat is not None:
-        cn = args.coin
-        ft = args.fiat
-    elif 'crypto' in cfg_vals:
-        cn = cfg_vals['crypto']['def_coin']
-        ft = cfg_vals['crypto']['def_fiat']
-    else:
-        print('\nInvalid Parameters.')
-        return False
-    if not currency_check(ft.upper()):
+    prm = get_params('crypto', 'coin', 'fiat')
+    if not currency_check(prm[1].upper()):
         print('\nInvalid currency.')
         return False
-    cprice = crypto_price(cn.upper(), ft.upper())
-    if cn in cfg_vals['crypto']:
-        print('Your ' + cn.upper() + ' is currently worth ' + 
-            str(float(cfg_vals['crypto'][cn]) * float(cprice)) +
-            ' ' + ft.upper() + '.')
+    cprice = crypto_price(prm[0].upper(), prm[1].upper())
+    if prm[0] in cfg_vals['crypto']:
+        print('Your ' + prm[0].upper() + ' is currently worth ' + 
+            str(float(cfg_vals['crypto'][prm[0]]) * float(cprice)) +
+            ' ' + prm[1].upper() + '.')
 
 def wth(args):
     from modules.weather import get_weather, get_coords
-    if args.town is not None and args.area is not None:    
-        t = args.town
-        a = args.area
-    else:
-        try:
-            t = cfg_vals['weather']['town']
-            a = cfg_vals['weather']['area']
-        except:
-            print('\nNo town provided.')
-            return False
-    latlon = get_coords(t, a)
+    prm = get_params('weather', 'town', 'area')
+    latlon = get_coords(prm[0], prm[1])
     try:
         weather = get_weather(latlon)
         print('\n' + weather['detailedForecast'])
@@ -66,44 +65,25 @@ def xmas(args):
 
 def hnews(args):
     from modules.hnews import hacker_news
-    if 'articles' in cfg_vals['hnews']:
-        ars = cfg_vals['hnews']['stories']
-    else:
-        ars = args.stories
+    prm = get_params('hnews', 'stories')
     print('\n', end='')
-    hacker_news(int(ars))
+    hacker_news(int(prm[0]))
 
 def fx(args):
     from modules.forex import frx
-    if args.base is not None and args.target is not None:
-        bs = args.base
-        tg = args.target
-    elif 'forex' in cfg_vals: 
-        bs = cfg_vals['forex']['base']
-        tg = cfg_vals['forex']['target']
-    else:
-        print('\nInvalid parameters.')
-        return False
+    prm = get_params('forex', 'base', 'target')
     try:
-        value = frx(bs.upper(), tg.upper())
-        print('\nOne ' + bs.upper() + ' is worth ' + str(value) + ' ' + tg.upper() + '.')
+        value = frx(prm[0].upper(), prm[1].upper())
+        print('\nOne ' + prm[0].upper() + ' is worth ' + str(value) + ' ' + prm[1].upper() + '.')
     except:
         print('\nInvalid parameters.')
         return False
 
 def reddit(args):
     from modules.reddit import sub_headlines
-    if args.sub is not None and args.titles is not None:
-        subred = args.sub
-        headlines = args.titles
-    elif 'reddit' in cfg_vals: 
-        subred = cfg_vals['reddit']['subreddit']
-        headlines = cfg_vals['reddit']['headlines']
-    else:
-        print('\nInvalid parameters.')
-        return False
+    prm = get_params('reddit', 'subreddit', 'headlines')
     try:
-        response = sub_headlines(subred, int(headlines))
+        response = sub_headlines(prm[0], int(prm[1]))
         j = response.json()
         print('\n', end='')
         for x in range(len(j['data']['children'])):
@@ -115,14 +95,8 @@ def reddit(args):
 
 def stock(args):
     from modules.stocks import get_stock
-    if args.stock is not None:
-        ticker = args.stock
-    elif 'stock' in cfg_vals['stocks']:
-        ticker = cfg_vals['stocks']['stock']
-    else:
-        print('\nInvalid parameters')
-        return False
-    data = get_stock(ticker)
+    prm = get_params('stocks', 'stock')
+    data = get_stock(prm[0])
     print('\nLatest high: ' + str(data['data'][len(data['data']) - 1]['high']))
     print('Latest low: ' + str(data['data'][len(data['data']) - 1]['low']))
 
@@ -161,7 +135,7 @@ xmas_parser = subparsers.add_parser('xmas', help='Find how many days until Chris
 xmas_parser.set_defaults(func=xmas)
 
 hnews_parser = subparsers.add_parser('hnews', help='Retrieve a number of top headlines from Hacker News.')
-hnews_parser.add_argument('stories', nargs='?', default=5, const=5, help='how many headlines you want to see')
+hnews_parser.add_argument('stories', nargs='?', help='how many headlines you want to see')
 hnews_parser.set_defaults(func=hnews)
 
 fx_parser = subparsers.add_parser('fx', help='Find the exchange rate of one currency into another.')
@@ -170,8 +144,8 @@ fx_parser.add_argument('target', nargs='?', help='target currency to be compared
 fx_parser.set_defaults(func=fx)
 
 reddit_parser = subparsers.add_parser('reddit', help='Grab a specified number of headlines from a particular subreddit.')
-reddit_parser.add_argument('sub', nargs='?', help='subreddit to grab headlines from')
-reddit_parser.add_argument('titles', nargs='?', help='number of headlines to grab')
+reddit_parser.add_argument('subreddit', nargs='?', help='subreddit to grab headlines from')
+reddit_parser.add_argument('headlines', nargs='?', help='number of headlines to grab')
 reddit_parser.set_defaults(func=reddit)
 
 stock_parser = subparsers.add_parser('stock', help='Grab recent high/low for specified stock.')
@@ -193,4 +167,5 @@ if __name__ == '__main__':
     from modules.config import import_config
     cfg_vals = import_config()
     args = parser.parse_args()
+    cli_params = vars(args)
     args.func(args)
