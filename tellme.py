@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 # This is a general purpose function to grab the parameters for the subparsers either
 # from the command line arguments, or, if no command line arguments are given, from
@@ -7,13 +8,16 @@ import argparse
 def get_params(cfg_sect, *params):
     final_params = []
     for p in params:
-        if cli_params[p] is not None:
-            final_params.append(cli_params[p])
-        elif p in cfg_vals[cfg_sect]:
-            final_params.append(cfg_vals[cfg_sect][p])
+        try:
+            if cli_params[p] is not None:
+                final_params.append(cli_params[p])
+            elif p in cfg_vals[cfg_sect]:
+                final_params.append(cfg_vals[cfg_sect][p])
+        except KeyError:
+            continue
     if len(final_params) < len(params):
         print('\nInsufficient parameters.')
-        return False
+        sys.exit(1)
     else:
         return final_params
 
@@ -97,8 +101,10 @@ def stock(args):
     from modules.stocks import get_stock
     prm = get_params('stocks', 'stock')
     data = get_stock(prm[0])
-    print('\nLatest high: ' + str(data['data'][len(data['data']) - 1]['high']))
-    print('Latest low: ' + str(data['data'][len(data['data']) - 1]['low']))
+    print('\nStock:          ' + data['companyName'])
+    print('52 Week High:   ' + str(data['week52high']))
+    print('52 Week Low:    ' + str(data['week52low']))
+    print('52 Week Change: ' + str(data['week52change']))
 
 
 
