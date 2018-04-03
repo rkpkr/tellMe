@@ -116,7 +116,7 @@ def zones(args):
 def timeleft(args):
     from modules.timeleft import time_left
     print('\n', end='')
-    time_left(args.gender.upper(), int(args.year), int(args.month), int(args.day))
+    time_left(int(args.death_age), int(args.year), int(args.month), int(args.day))
 
 parser = argparse.ArgumentParser(prog='tellme',description='Retrieve information without leaving the command line.')
 subparsers = parser.add_subparsers()
@@ -162,7 +162,7 @@ zones_parser = subparsers.add_parser('zones', help='Display time in various time
 zones_parser.set_defaults(func=zones)
 
 timeleft_parser = subparsers.add_parser('timeleft', help='Find how many years or days you have left to live.')
-timeleft_parser.add_argument('gender')
+timeleft_parser.add_argument('death_age', help='year you expect to die')
 timeleft_parser.add_argument('year', help='year of birth')
 timeleft_parser.add_argument('month', help='month of birth')
 timeleft_parser.add_argument('day', help='day of birth')

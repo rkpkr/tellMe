@@ -62,13 +62,7 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
     `tellme.py zones`  # Shows time in a number of time zones
 
-**timeleft** - Calculates the amount of years and days you have left to live. Arguments are: gender, year of birth, month of birth, day of birth.
+**timeleft** - Calculates the amount of years and days you have left to live. Arguments are: age you expect to die, year of birth, month of birth, day of birth.
 
-    `tellme.py timeleft M 1912 7 23`  # Days left for a male born on 7/23/1912
+    `tellme.py timeleft 65 1982 7 23`  # Shows how many years and days left until someone born in 1982 turns 65
     
-
-## Future Plans
-
-* Better error handling/logging
-* ASCII Art module
-* Miscellaneous time-related modules
