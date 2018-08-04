@@ -46,9 +46,9 @@ That command will check the Bitcoin price in British Pounds and display it on sc
 
     `tellme.py hnews 10`  # Retrieves the top 10 headlines from Hacker News
 
-**fx** - Finds the value of target currency in base currency you specify.
+**fx** - Shows the value of various currencies in comparison to USD.
 
-    `tellme.py fx usd nzd`  # Shows the value of USD in NZD
+    `tellme.py fx`  # Shows a list of currency values
 
 **reddit** - Grabs the specified number of headlines from specified subreddit.
 
