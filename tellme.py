@@ -75,10 +75,9 @@ def hnews(args):
 
 def fx(args):
     from modules.forex import frx
-    prm = get_params('forex', 'base', 'target')
     try:
-        value = frx(prm[0].upper(), prm[1].upper())
-        print('\nOne ' + prm[0].upper() + ' is worth ' + str(value) + ' ' + prm[1].upper() + '.')
+        print('\n')
+        frx()
     except:
         print('\nInvalid parameters.')
         return False
@@ -144,9 +143,7 @@ hnews_parser = subparsers.add_parser('hnews', help='Retrieve a number of top hea
 hnews_parser.add_argument('stories', nargs='?', help='how many headlines you want to see')
 hnews_parser.set_defaults(func=hnews)
 
-fx_parser = subparsers.add_parser('fx', help='Find the exchange rate of one currency into another.')
-fx_parser.add_argument('base', nargs='?', help='base currency to compare to target currency')
-fx_parser.add_argument('target', nargs='?', help='target currency to be compared to')
+fx_parser = subparsers.add_parser('fx', help='Display the exchange rates of various currencies in comparison to USD.')
 fx_parser.set_defaults(func=fx)
 
 reddit_parser = subparsers.add_parser('reddit', help='Grab a specified number of headlines from a particular subreddit.')
